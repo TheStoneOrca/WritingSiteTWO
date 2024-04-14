@@ -7,7 +7,7 @@ export default function Home() {
   const router = useRouter();
   return (
     <div className="flex w-full h-full flex-col">
-      <div className="flex w-full h-[75vh] justify-center items-center flex-col">
+      <div className="flex w-full h-[60vh] justify-center items-center flex-col">
         <div className="flex flex-col justify-items-center items-center text-center w-full">
           <Title className="text-5xl">
             Show Your <span className="text-blue-300">Works</span> to the World
