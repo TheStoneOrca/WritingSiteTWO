@@ -32,7 +32,13 @@ export default function NavBar() {
     <>
       <header className="flex items-center">
         <div className="flex w-full ml-5">
-          <Group gap="sm">
+          <Group
+            gap="sm"
+            className="hover:cursor-pointer"
+            onClick={() => {
+              router.push("/");
+            }}
+          >
             <Title>Story Orca</Title>
           </Group>
         </div>
