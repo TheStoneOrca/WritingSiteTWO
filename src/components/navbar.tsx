@@ -45,8 +45,9 @@ export default function NavBar() {
 
         <div className="flex w-full justify-center">
           <Group gap="lg">
-            {links.map((link) => (
+            {links.map((link, v: number) => (
               <Text
+                key={v}
                 className={
                   "text-black font-semibold text-sm hover:cursor-pointer p-2"
                 }
