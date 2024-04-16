@@ -9,14 +9,37 @@ import {
   Title,
 } from "@mantine/core";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactSecureStorage from "react-secure-storage";
 
 export default function SignInCard() {
   const { register, handleSubmit } = useForm();
+  const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const onSubmit = (data: any) => {
-    //TODO Create Fetch Request
+    try {
+      fetch("/api/signin", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        res.json().then((result) => {
+          if (result.status === 200) {
+            ReactSecureStorage.setItem("sessionJWT", result.sessionJWT);
+            router.push("/home");
+          } else if (result.status === 404) {
+            setError("User not found!");
+          }
+        });
+      });
+      //TODO Create Fetch Request
+    } catch (error) {
+      console.error(error);
+      setError("Unexpected error while proccessing, please try again later.");
+    }
   };
   return (
     <Card withBorder className="w-80 flex h-[400px]" radius="md" p="md">
@@ -52,6 +75,8 @@ export default function SignInCard() {
       <Card.Section>
         <Link href="/signup">Don't have an account?</Link>
       </Card.Section>
+
+      {error && <h1>{error}</h1>}
     </Card>
   );
 }

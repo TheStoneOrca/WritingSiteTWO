@@ -9,20 +9,45 @@ import {
   Title,
 } from "@mantine/core";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactSecureStorage from "react-secure-storage";
 
 export default function SignUpCard() {
   const [ageError, setAgeError] = useState<boolean>();
+  const [error, setError] = useState<string>("");
 
   const { register, handleSubmit } = useForm();
 
+  const router = useRouter();
+
   const onSubmit = (data: any) => {
-    const age: number = Number(data.age);
-    if (age < 13) {
-      setAgeError(true);
+    try {
+      const age: number = Number(data.age);
+      if (age < 13) {
+        setAgeError(true);
+        return;
+      }
+      fetch("/api/signup", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        res.json().then((result) => {
+          if (result.status === 200) {
+            ReactSecureStorage.setItem("sessionJWT", result.sessionJWT);
+            router.push("/home");
+          } else if (result.status === 201) {
+            setError("Username or Email already registered!");
+          }
+        });
+      });
+      //TODO Create Fetch Request
+    } catch (error) {
+      console.error(error);
+      setError("Unexpected error while proccessing, please try again later.");
     }
-    //TODO Create Fetch Request
   };
   return (
     <Card withBorder className="w-80 flex h-[450px]" radius="md" p="md">
@@ -44,7 +69,7 @@ export default function SignUpCard() {
             <Text className="flex text-start text-black font-medium" size="sm">
               Password
             </Text>
-            <PasswordInput {...register("password")} required />
+            <PasswordInput {...register("password")} required minLength={8} />
           </div>
           <div className="flex flex-col">
             <Text className="flex text-start text-black font-medium" size="sm">
@@ -85,6 +110,8 @@ export default function SignUpCard() {
       <Card.Section>
         <Link href="/signin">Already have an account?</Link>
       </Card.Section>
+
+      {error && <h1>{error}</h1>}
     </Card>
   );
 }
