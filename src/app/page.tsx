@@ -1,10 +1,13 @@
 "use client";
 
+import useUser from "@/hooks/useUser";
 import { Button, Container, Text, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
+
   return (
     <div className="flex w-full h-full flex-col">
       <div className="flex w-full h-[60vh] justify-center items-center flex-col">
