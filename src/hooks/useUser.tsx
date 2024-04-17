@@ -58,7 +58,7 @@ export default function useUser() {
     } catch (error) {
       setUserDetails({
         user: null,
-        isReady: false,
+        isReady: true,
         isSignedIn: false,
         isError: true,
       });

@@ -42,7 +42,7 @@ export default function NavBar() {
       {isReady ? (
         <>
           <header className="flex items-center">
-            <div className="flex w-full ml-5">
+            <div className="flex w-full ml-1">
               <Group
                 gap="sm"
                 className="hover:cursor-pointer"
